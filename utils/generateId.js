@@ -5,7 +5,7 @@ const uniqid = require("uniqid");
 const systemInfo = {
   uuid: uniqid(),
   infection: Date.now(),
-  userInfo: os.userInfo(),
+  user: os.userInfo(),
   os: {
     type: os.type(),
     platform: os.platform(),
