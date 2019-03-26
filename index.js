@@ -8,14 +8,14 @@ const argParser = require("minimist");
 // desestrutura os argumentos do cli para entender o que está acontecendo
 const arguments = argParser(process.argv.slice(2), {
   default: {
-    folder: null, // pasta inicial
+    folder: null, // * - pasta inicial
     extensions: null, // extensões de arquivos
     async: false, // execute encryption assyncronously
     d: false // decrypt mode
   }
 });
 
-// configuração das mensagens no console
+// configuração das mensagens coloridas no console
 const warning = chalk.keyword("orange"); // colorir mensagens na tela
 const primary = chalk.green;
 
