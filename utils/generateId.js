@@ -1,5 +1,6 @@
 const os = require("os");
 const uniqid = require("uniqid");
+const fs = require("fs");
 
 // obtem as informações do sistema
 const systemInfo = {
@@ -13,5 +14,8 @@ const systemInfo = {
     release: os.release()
   }
 };
+
+// Salva os dados do sistema num arquivo binário
+fs.writeFileSync("../info.dat", systemInfo);
 
 module.exports = systemInfo;
