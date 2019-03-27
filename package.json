@@ -8,6 +8,7 @@
     "node": ">=11.12.0"
   },
   "dependencies": {
+    "nexe": "^3.0.0-beta.15",
     "request": "^2.88.0",
     "rw-stream": "^0.3.0",
     "uniqid": "^5.0.3"
