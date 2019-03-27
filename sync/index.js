@@ -22,7 +22,7 @@ module.exports = syncWorker = (file, cipher) => {
   // o valor contido do arquivo armazenado em buffer, corresponde a inicio: position - fim: chunkSize
   while (bytesRead > 0) {
     // encripta o conteúdo lido do arquivo
-    var encrypted = cipher(buffer);
+    var encrypted = cipher.update(buffer);
 
     const wc = fs.writeSync(fd, encrypted, 0, encrypted.length, position);
     // incrementa a posição de leitura e escrita do próximo loop
