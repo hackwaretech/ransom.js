@@ -1,3 +1,5 @@
+const path = require("path");
+const fs = require("fs");
 /**
  * Salva a chave num arquivo especificado pelo `type`
  * @param { string } keyValue A chave a ser salva
