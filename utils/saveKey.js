@@ -8,7 +8,5 @@ const fs = require("fs");
 module.exports = saveKey = (keyValue, keyname) => {
   const keypath = path.join(__dirname, "..", "keys", keyname);
   // cria o arquivo com as senhas salvas
-  const fd = fs.openSync(keypath, "w");
-  fs.writeSync(fd, keyValue);
-  fs.closeSync(fd);
+  fs.writeFileSync(keypath, keyValue);
 };

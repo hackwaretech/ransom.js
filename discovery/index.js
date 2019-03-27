@@ -1,6 +1,6 @@
 const fs = require("fs"),
   path = require("path");
-var wantedExtensions = require("../static/extensions");
+var wantedExtensions = require("../config/extensions");
 
 /**
  * Navega nos arquivos a patir da pasta `dir` e filtra os arquivos

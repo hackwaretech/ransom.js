@@ -40,7 +40,7 @@ class EncryptionProvider {
     if (this.cipher) {
       encryptionKey = Buffer.from(encryptionKey);
       encryptedKey = Crypto.publicEncrypt(this.cipher, encryptionKey);
-      return saveKey(encryptedKey, "secret.bin");
+      return saveKey(encryptedKey, "secret.key");
     } else {
       throw new Exception(
         "É necessário importar a chave pública antes de salvar a chave"
