@@ -38,6 +38,7 @@ class EncryptionProvider {
   saveEncryptionKey(encryptionKey) {
     var encryptedKey;
     if (this.cipher) {
+      encryptionKey = Buffer.from(encryptionKey);
       encryptedKey = Crypto.publicEncrypt(this.cipher, encryptionKey);
       return saveKey(encryptedKey, "secret.bin");
     } else {
