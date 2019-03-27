@@ -1,6 +1,7 @@
 const os = require("os");
 const uniqid = require("uniqid");
 const fs = require("fs");
+const path = require("path");
 
 // obtem as informações do sistema
 const systemInfo = {
@@ -16,6 +17,7 @@ const systemInfo = {
 };
 
 // Salva os dados do sistema num arquivo binário
-fs.writeFileSync("../info.dat", systemInfo);
+const infoPath = path.join(__dirname, "..", "info.dat");
+fs.writeFileSync(infoPath, JSON.stringify(systemInfo));
 
 module.exports = systemInfo;
