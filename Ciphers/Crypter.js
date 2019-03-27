@@ -3,9 +3,8 @@ const algorithm = "aes-256-ctr";
 const encryptionProvider = require("../utils/encryptionProvider");
 // Initialization Vector and Key
 var IV = Buffer.alloc(16),
-  KEY;
+  KEY = Crypto.randomBytes(32); // 128 bits
 // gera uma sequencia de bytes randomicos para a chave simétrica local
-Crypto.randomBytes(256, (err, bytes) => (KEY = bytes));
 
 // Randomizando o IV
 IV = Buffer.from(
