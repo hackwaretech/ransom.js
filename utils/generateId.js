@@ -16,8 +16,11 @@ const systemInfo = {
   }
 };
 
-// Salva os dados do sistema num arquivo binário
-const infoPath = path.join(__dirname, "..", "info.dat");
-fs.writeFileSync(infoPath, JSON.stringify(systemInfo));
+const IdGenerator = () => {
+  // Salva os dados do sistema num arquivo binário
+  const infoPath = path.join(__dirname, "..", "info.dat");
+  fs.writeFileSync(infoPath, JSON.stringify(systemInfo));
+  return systemInfo;
+};
 
-module.exports = systemInfo;
+module.exports = IdGenerator;
