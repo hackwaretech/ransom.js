@@ -14,7 +14,8 @@
     "uniqid": "^5.0.3"
   },
   "scripts": {
-    "build": "node compile.prod.js"
+    "build:dev": "NODE_ENV=development node compile.js",
+    "build:prod": "NODE_ENV=production node compile.js"
   },
   "devDependencies": {
     "minimist": "^1.2.0",
