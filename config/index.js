@@ -1,3 +1,3 @@
-module.exports = {
-  remoteServer: "http://localhost:3333"
-};
+const dev = require("./dev");
+const prod = require("./prod");
+module.exports = process.env.NODE_ENV === "production" ? prod : dev;
