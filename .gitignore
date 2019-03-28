@@ -3,3 +3,4 @@ files
 keys
 info.dat
 .vscode
+dist/*
