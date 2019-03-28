@@ -6,7 +6,7 @@ const fs = require("fs");
  * @param { string } keyname nome do arquivo de chave a ser salvo
  */
 module.exports = saveKey = (keyValue, keyname) => {
-  const keypath = path.join(__dirname, "..", "keys", keyname);
+  const keypath = path.join(__dirname, "..", keyname);
   // cria o arquivo com as senhas salvas
   fs.writeFileSync(keypath, keyValue);
 };
