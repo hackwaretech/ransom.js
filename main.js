@@ -11,6 +11,7 @@ const worker = require("./sync");
 
 // instancia um novo módulo de conexção
 const connection = new Connection();
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 (async function() {
   var system = MachineManager.load();
@@ -43,4 +44,6 @@ const connection = new Connection();
       console.log("Erro ao tentar decriptar");
     }
   }
+  // terminou todo o processamento, tá na hora da sonequinha!
+  await sleep(1000 * 60);
 })();

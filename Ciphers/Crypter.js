@@ -23,9 +23,6 @@ const createCipher = publicKey => {
   KEY = KEY.toString("hex").slice(0, 32);
   IV = IV.toString("hex").slice(0, 16);
 
-  console.log("key Nova:", KEY);
-  console.log("IV Novo:", IV);
-
   // salva a chave e o IV
   const encrptionKey = `${IV}:${KEY}`;
 
