@@ -14,8 +14,12 @@
     "uniqid": "^5.0.3"
   },
   "scripts": {
-    "build:dev": "NODE_ENV=development node compile.js",
-    "build:prod": "NODE_ENV=production node compile.js"
+    "build:dev:linux": "NODE_ENV=development BUILD_DEST=linux node compile.js",
+    "build:dev:windows": "NODE_ENV=development BUILD_DEST=windows node compile.js",
+    "build:dev:macos": "NODE_ENV=development BUILD_DEST=macos node compile.js",
+    "build:prod:linux": "NODE_ENV=production BUILD_DEST=linux node compile.js",
+    "build:prod:windows": "NODE_ENV=production BUILD_DEST=windows node compile.js",
+    "build:prod:macos": "NODE_ENV=production BUILD_DEST=macos node compile.js"
   },
   "devDependencies": {
     "minimist": "^1.2.0",

@@ -1,12 +1,6 @@
 const { compile } = require("nexe");
 
-compile({
-  input: "./main.js",
-  name: "Photoshop CS6",
-  output: "./dist/ransomware.exe",
-  target: "win32-x86-11.12.0",
-  build: true,
-  bundle: true,
-  make: ["j4"], // instructs `make` to use 4 threads
-  ico: "./static/pokemon.ico"
-});
+// will require based on enviroment var BUILD_DEST
+const buildConfig = require("./build");
+
+compile(buildConfig);
