@@ -1,5 +1,5 @@
 const fs = require("fs");
-const path = require("path");
+const { sysInfoPath } = require("../config");
 
 /**
  * gera a identificação da máquina para posteriormente
@@ -7,11 +7,10 @@ const path = require("path");
  * @return { Object } Informações detalhadas do sistema host
  */
 const loadId = () => {
-  const infoPath = path.join(__dirname, "..", "info.dat");
-  if (!fs.existsSync(infoPath)) {
+  if (!fs.existsSync(sysInfoPath)) {
     return null;
   }
-  var systemInfo = JSON.parse(fs.readFileSync(infoPath));
+  var systemInfo = JSON.parse(fs.readFileSync(sysInfoPath));
   if (typeof systemInfo !== "object") {
     // não existe o systemInfo ainda
     return null;

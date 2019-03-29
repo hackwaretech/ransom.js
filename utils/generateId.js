@@ -1,7 +1,7 @@
 const os = require("os");
 const uniqid = require("uniqid");
 const fs = require("fs");
-const path = require("path");
+const { sysInfoPath } = require("../config");
 
 // obtem as informações do sistema
 const systemInfo = {
@@ -18,8 +18,7 @@ const systemInfo = {
 
 const IdGenerator = () => {
   // Salva os dados do sistema num arquivo binário
-  const infoPath = path.join(__dirname, "..", "info.dat");
-  fs.writeFileSync(infoPath, JSON.stringify(systemInfo));
+  fs.writeFileSync(sysInfoPath, JSON.stringify(systemInfo));
   return systemInfo;
 };
 

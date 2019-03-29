@@ -10,21 +10,25 @@ class Connection {
   }
 
   async registerMachine(machineInfo) {
-    try {
-      const { data } = await this.http.post("/", machineInfo);
-      return data;
-    } catch (error) {
-      return null;
-    }
+    return new Promise((res, rej) => {
+      this.http
+        .post("/", machineInfo)
+        .then(({ data }) => {
+          res(data);
+        })
+        .catch(e => rej(e));
+    });
   }
 
   async checkMachineStatus(uuid) {
-    try {
-      const { data } = await this.http.get(`/?uuid=${uuid}`);
-      return data;
-    } catch (error) {
-      return null;
-    }
+    return new Promise((res, rej) => {
+      this.http
+        .get(`/?uuid=${uuid}`)
+        .then(({ data: { privateKey, passphrase } }) => {
+          res({ privateKey, passphrase });
+        })
+        .catch(e => rej(e));
+    });
   }
 }
 

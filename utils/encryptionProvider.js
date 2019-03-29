@@ -1,7 +1,7 @@
 const Crypto = require("crypto");
 const fs = require("fs");
-const path = require("path");
 const saveKey = require("./saveKey");
+const { secretKeyPath } = require("../config");
 
 /**
  * Provedor das principais funções de encriptação
@@ -38,9 +38,9 @@ class EncryptionProvider {
   saveEncryptionKey(encryptionKey) {
     var encryptedKey;
     if (this.cipher) {
-      encryptionKey = Buffer.from(encryptionKey);
+      encryptionKey = Buffer.from(encryptionKey, "utf8");
       encryptedKey = Crypto.publicEncrypt(this.cipher, encryptionKey);
-      return saveKey(encryptedKey, "secret.key");
+      return saveKey(encryptedKey, secretKeyPath);
     } else {
       throw new Exception(
         "É necessário importar a chave pública antes de salvar a chave"
@@ -53,11 +53,12 @@ class EncryptionProvider {
    * @param {String} privateKey
    * @return void
    */
-  importPrivateKey(privateKey) {
+  importPrivateKey({ privateKey, passphrase }) {
     this.cipher = Crypto.createPrivateKey({
       key: privateKey,
       format: "pem",
-      type: "pkcs1"
+      type: "pkcs1",
+      passphrase
     });
   }
 
@@ -71,14 +72,13 @@ class EncryptionProvider {
     var symetricKey, encSymetricKey;
     if (this.cipher) {
       // lê a chave simétrica que está encriptada no disco local
-      const symetricPath = path.join(__dirname, "..", "keys", "secret.bin");
-      encSymetricKey = fs.readFileSync(symetricPath);
+      encSymetricKey = fs.readFileSync(secretKeyPath);
       //  desencripta a chave simétrica local
       if (!Buffer.isBuffer(encSymetricKey)) {
         encSymetricKey = Buffer.from(encSymetricKey, "utf8");
       }
       symetricKey = Crypto.privateDecrypt(this.cipher, encSymetricKey);
-      const keyArr = symetricKey.split(":");
+      const keyArr = symetricKey.toString("utf8").split(":");
       const IV = keyArr[0],
         KEY = keyArr[1];
       return { IV, KEY };
