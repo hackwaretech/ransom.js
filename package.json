@@ -22,7 +22,7 @@
     "build:prod:macos": "NODE_ENV=production BUILD_DEST=macos node compile.js"
   },
   "devDependencies": {
-    "minimist": "^1.2.3",
+    "minimist": "^1.2.6",
     "chalk": "^2.4.2"
   }
 }
